@@ -1,0 +1,241 @@
+ hiBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bigTxt.setText("Hi Huttoo..");
+                background.setBackgroundColor(Color.GREEN);
+
+            }
+        });
+
+
+
+        minusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                a--;
+                bigTxt.setText(String.valueOf(a));
+            }
+        });
+
+
+
+
+        plusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int userinput = Integer.parseInt(getInput.getText().toString());
+                bigTxt.setText(Double.toString(userinput + a++));
+            }
+        });
+
+
+
+        resultBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int userinput = Integer.parseInt(getInput.getText().toString());
+                bigTxt.setText(Double.toString(userinput * 100));
+            }
+        });
+
+
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String userinput = getInput.getText().toString();
+                bigTxt.setText(userinput);
+
+            }
+        });
+
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+
+                if (getInput.getText().toString().equals("")){
+                    bigTxt.setText("ERROR");
+                }
+
+                else {
+                    double userinput = Double.parseDouble(getInput.getText().toString());
+                    total.setText(Double.toString(progress * userinput / 100));
+                    discount.setText(seekBar.getProgress() + " : " + seekBar.getMax());
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
+        taxBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                double x = Double.parseDouble(getInput.getText().toString());
+
+                if ( x < 1000)
+                {
+                    double tax = x * 10;
+                    bigTxt.setText(Double.toString(tax));
+                }
+
+
+                else if (x < 2000){
+                    double tax = x * 20;
+                    bigTxt.setText(Double.toString(tax));
+                }
+
+                else if (x < 3000){
+                    double tax = x * 30;
+                    bigTxt.setText(Double.toString(tax));
+                }
+
+                else {
+                    double tax = x * 40;
+                    bigTxt.setText(Double.toString(tax));
+                }
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String a = nameInput.getText().toString();
+                String b = ageInput.getText().toString();
+                String c = emailInput.getText().toString();
+
+                Map<String, Object> user = new HashMap<>();
+                user.put("Name", a);
+                user.put("Age", b);
+                user.put("Email", c);
+
+                db.collection("Users")
+                        .add(user);
+
+                Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                startActivity(intent);
+
+            }
+        });
+
+
+        passBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MainActivity.this , MainActivity2.class);
+
+                intent.putExtra("Name","Pakaya");
+
+                startActivity(intent);
+
+            }
+        });
+
+
+        convertBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int userinput = Integer.parseInt(getInput.getText().toString());
+                RadioButton radioButton = findViewById(radioGroup.getCheckedRadioButtonId());
+
+
+                if (radioButton.getId() == R.id.radioBtn1){
+                    bigTxt.setText(Double.toString(userinput * 10));
+
+
+                } else if (radioButton.getId() == R.id.radioBtn2) {
+                    bigTxt.setText(Double.toString(userinput * 20));
+
+                }
+
+                else {
+                    bigTxt.setText(Double.toString(userinput * 30));
+                }
+
+
+            }
+        });
+
+
+            addBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String a = nameInput.getText().toString();
+
+                    Map<String, Object> user = new HashMap<>();
+                    user.put("name" , a);
+
+                    db.collection("Users")
+                            .add(user);
+
+                }
+            });
+
+
+        val myCheckBox = findViewById<CheckBox>(R.id.myCheckBox)
+
+                myCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                Toast.makeText(this, "Checkbox is checked", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Checkbox is unchecked", Toast.LENGTH_SHORT).show()
+            }
+
+
+            
+            
+            private void getdata() {
+                db.collection("Users")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()){
+                                    for (QueryDocumentSnapshot document : task.getResult()){
+
+                                        String a = document.getString("Name");
+                                        String b = document.getString("Email");
+                                        String c = document.getString("Age");
+
+                                        name.setText(a);
+                                        email.setText(b);
+                                        age.setText(c);
+
+                                    }
+                                }
+                            }
+                        });
+            }
+        });
+
+        Bundle extraMsg = getIntent().getExtras();
+
+        String a = extraMsg.getString("Name");
+
+        name.setText(a);
